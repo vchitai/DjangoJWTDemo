@@ -15,34 +15,27 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url
-from django.contrib.auth.models import User
-import rest_framework_jwt.authentication as a
-
-from django.http import HttpResponse
-from rest_framework import permissions
-from rest_framework.views import APIView
 from rest_framework_jwt import views
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
+from DjangoAPIWithToken.models import ClientModel
+from DjangoAPIWithToken.views import JWTTokenProviderView, MockView
 
-class MockView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request):
-        return HttpResponse('mockview-get')
-
-    def post(self, request):
-        return HttpResponse('mockview-post')
-
+# client = ClientModel.objects.create_new_client("is", "123123")
+from authentication.authentication_v2 import MyJSONWebTokenAuthentication
 
 urlpatterns = [
     url('admin/', admin.site.urls),
     url(r'^api-token-auth/', views.obtain_jwt_token),
     url(r'^auth-token-refresh/$', views.refresh_jwt_token),
     url(r'^auth-token-verify/$', views.verify_jwt_token),
+    url(r'^get-jwt-token/$', JWTTokenProviderView.as_view()),
 
-    url(r'^jwt/$', MockView.as_view(
-        authentication_classes=[JSONWebTokenAuthentication])),
+    # url(r'^protected_api_with_jwt/$', MockView.as_view(
+    #     authentication_classes=[JSONWebTokenAuthentication])),
+    #
+    url(r'^protected_api/$', MockView.as_view(
+        authentication_classes=[MyJSONWebTokenAuthentication])),
 ]
 # user = User.objects.create_user('tai', 'abc@email.com', '123123')
 # user.save()
