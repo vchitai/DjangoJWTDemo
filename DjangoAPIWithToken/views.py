@@ -23,5 +23,4 @@ class JWTTokenProviderView(APIView):
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid()
-        print(serializer.validated_data)
         return Response(serializer.validated_data)
