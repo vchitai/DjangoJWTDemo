@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from jose.exceptions import ExpiredSignatureError, JWTError, JWTClaimsError
 from rest_framework.authentication import BaseAuthentication
 
@@ -43,8 +44,16 @@ class MyJSONWebTokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed(msg)
 
         client = self.authenticate_credentials(payload)
+        client_name = client['client_name']
+        try:
+            user = User.objects.get(username=client_name)
+        except User.DoesNotExist:
+            # Create a new user. There's no need to set a password
+            # because only the password from settings.py is checked.
+            user = User(username=client_name)
+            user.save()
 
-        return client, payload
+        return user, client
 
     def authenticate_credentials(self, payload):
         """
@@ -59,7 +68,7 @@ class MyJSONWebTokenAuthentication(BaseAuthentication):
         if client is None:
             msg = _('Invalid signature.')
             raise AuthenticationFailed(msg)
-        pass
+        return payload
         # User = get_user_model()
         # username = jwt_get_username_from_payload(payload)
         #

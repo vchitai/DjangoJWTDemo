@@ -136,3 +136,5 @@ STATIC_URL = '/static/'
 #         'rest_framework.authentication.BasicAuthentication',
 #     ),
 # }
+
+AUTHENTICATION_BACKENDS = ['authentication.authentication_v2.MyJSONWebTokenAuthentication']

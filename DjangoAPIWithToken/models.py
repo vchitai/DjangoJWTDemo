@@ -13,4 +13,4 @@ class ClientModel(models.Model):
     class Meta:
         db_table = 'client'
         managed = False
-        app_label = 'auth'
+        app_label = 'client_auth'
