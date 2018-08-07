@@ -34,8 +34,7 @@ urlpatterns = [
     # url(r'^protected_api_with_jwt/$', MockView.as_view(
     #     authentication_classes=[JSONWebTokenAuthentication])),
     #
-    url(r'^protected_api/$', MockView.as_view(
-        authentication_classes=[MyJSONWebTokenAuthentication])),
+    url(r'^protected_api/$', MockView.as_view(authentication_classes=[MyJSONWebTokenAuthentication])),
 ]
 # user = User.objects.create_user('tai', 'abc@email.com', '123123')
 # user.save()
