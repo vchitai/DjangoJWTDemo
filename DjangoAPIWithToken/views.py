@@ -16,11 +16,14 @@ class MockView(APIView):
     def post(self, request):
         return HttpResponse('mockview-post')
 
+
 class JWTTokenProviderView(APIView):
     http_method_names = ['post']
     serializer_class = JWTTokenProviderSerializer
 
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
-        serializer.is_valid()
-        return Response(serializer.validated_data)
+        if serializer.is_valid():
+            return Response(serializer.validated_data)
+        # else:
+        #     raise BadRequestException()
